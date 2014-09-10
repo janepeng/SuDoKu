@@ -1,6 +1,13 @@
 SuDoKu
 ======
 
+Version 2.0
+- Able to solve hard sudoku problems
+- The attached input is a random example of hard sudoku game
+- Added more complex algorithm to reduce the possibility table
+
+Gone far from the most optimal way.. can't garentee the correctness either, did not add validation tests.
+
 Version 1.0
 - Limited to file input
 - Able to solve simple sudoku problems
@@ -9,3 +16,4 @@ Version 1.0
 
 
 Exploring Best and most Optimal way to solve sudoku.
+
