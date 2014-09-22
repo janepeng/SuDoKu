@@ -1,6 +1,6 @@
 import sys
 
-def main():
+def solve_sudoku(sudoku_input):
     # initialize game board to 0s
     # TODO: initialize to something like undefined to have the possiblity
     # to get user to define the board
@@ -15,11 +15,24 @@ def main():
 
     # fill game board with pre-made sudoku games
     # TODO: let user input
-    i = 0;
+    i = 0
     with open('sudoku_input.txt', 'r') as f:
         for line in f:
             board[i] = line.strip().split()
             i += 1
+    
+    i = 0
+    if sudoku_input != "":
+        tmp = []
+        for c in sudoku_input:
+            if c == ' ':
+                continue
+            elif c == '\n':
+                board[i] = tmp
+                tmp = []
+                i += 1
+            else:
+                tmp += c
 
     initializePossiblityGrid(board, possibilities, numpos)
 
@@ -45,6 +58,7 @@ def main():
     print_board(board)
     # print_possibility_grid(possibilities)
     # print numpos
+    return board
 
 def checkIfDone(board):
     for x in range(0, 9):
@@ -224,5 +238,4 @@ def print_possibility_grid(grid):
             print grid[x][y]
         print ''
 
-main()
 

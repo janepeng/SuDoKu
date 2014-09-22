@@ -2,6 +2,12 @@ SuDoKu
 ======
 
 Version 2.0
+- The program has turned into a web application
+- Using Tornado as the server framework, Twitter bootstrap is included as well
+
+This change is aim for better data input method, thus no change on the sudoku solver algorithm
+
+Version 1.1
 - Able to solve hard sudoku problems
 - The attached input is a random example of hard sudoku game
 - Added more complex algorithm to reduce the possibility table

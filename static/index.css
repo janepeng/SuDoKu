@@ -1,0 +1,62 @@
+#wrapper {
+    margin: auto;
+    width: 60%;
+    height: 100%;
+    background: #CCD8F0;
+    min-height: 600px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.wrapper {
+    margin: auto;
+    width: 370px;
+}
+
+#title p {
+    padding-top:20px;
+    font-size: 30pt;
+    visibility: hidden;
+}
+
+table {
+    border: 2px solid black;
+    background: white;
+}
+
+.edge_row {
+    border-bottom: 2px solid black;
+}
+
+.input_box {
+    height: 36px;
+    border: none;
+    text-align: center;
+    background: transparent;
+}
+
+.edge_col {
+    border-right: 2px solid black;
+}
+
+.highlighted {
+    background: #CCD8F0;
+}
+
+.buffer {
+    height: 30px;
+}
+
+#result_table {
+    width: 338px;
+    height: 338px;
+    text-align: center;
+}
+
+#result_table td {
+    vertical-align: middle;
+}
+
+
+
+
