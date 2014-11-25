@@ -18,7 +18,8 @@ class SolveHandler(tornado.web.RequestHandler):
                     val = '0'
                 line += val + ' '
             sudoku_input += line[:-1] + '\n'
-        board = sudoku.solve_sudoku(sudoku_input)
+        #board = sudoku.solve_sudoku(sudoku_input)
+        board = sudoku.solve_sudoku("")
         message = ' '.join(str(item) for innerlist in board for item in innerlist)
         self.write(message)
 

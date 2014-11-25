@@ -44,7 +44,7 @@ table {
 }
 
 .buffer {
-    height: 30px;
+    height: 50px;
 }
 
 #result_table {
@@ -57,6 +57,8 @@ table {
     vertical-align: middle;
 }
 
-
+#result_table p {
+    margin: 0px;
+}
 
 

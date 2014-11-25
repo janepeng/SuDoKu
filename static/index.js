@@ -58,7 +58,10 @@ function createResultTable(input) {
                 tbody += 'class="' + i + j + '"';
             }
             tbody += '>\n';
-            tbody += '<p>' + board[ctr] + '</p>';
+            if (board[ctr] != '0') {
+                tbody += board[ctr];
+            }
+            ctr += 1;
             tbody += '</td>';
         }
         tbody += '</td>\n';
@@ -102,6 +105,18 @@ function highlightRowCol(cell) {
     oldcol = col;
 }
 
+function getData() {
+    var table = document.getElementById('game_table');
+    var inputs = table.getElementsByTagName('input');
+    var data = {};
+    for (i = 0; i < 9; i++) {
+        for (j = 0; j < 9; j++) {
+            data[i.toString() + j.toString()] = inputs[i*9+j].value;
+        }
+    }
+    return data;
+}
+
 $(document).ready(function() {
     console.log("ready!");
     createTable();
@@ -109,9 +124,9 @@ $(document).ready(function() {
         jQuery.ajax({
             url: '/submit',
             type: 'POST',
-            data: null,
-            success: function(data) {
-                createResultTable(data); 
+            data: getData(),
+            success: function(result) {
+                createResultTable(result); 
             }
         });
         e.preventDefault();

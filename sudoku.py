@@ -1,5 +1,36 @@
 import sys
 
+def solve(b):
+    board = b[:]
+
+    # a board of possible numbers to fill in the board
+    possibilities = [[[-1 for x in xrange(9)] for x in xrange(9)] for x in xrange(9)]
+    # 0 means number is put down
+    # 1 means number can be put down
+    # > 1 means more filtering required
+    numpos = [[9 for x in xrange(9)] for x in xrange(9)]
+
+    initializePossiblityGrid(board, possibilities, numpos)
+
+    done = False
+    initializePossiblityGrid(board, possibilities, numpos)
+    chances = 0
+    while (not done):
+        deductPossibilityGrid(board, possibilities, numpos)
+        advancedDeduction(board, possibilities, numpos)
+        chances += 1
+        for x in range(0, 9):
+            for y in range(0, 9):
+                if (numpos[x][y] == 1):
+                    board[x][y] = possibilities[x][y][0]
+                    numpos[x][y] = 0
+                    chances = 0
+        done = checkIfDone(board)
+        if chances == 3:
+            break
+
+    return board
+
 def solve_sudoku(sudoku_input):
     # initialize game board to 0s
     # TODO: initialize to something like undefined to have the possiblity
@@ -20,7 +51,7 @@ def solve_sudoku(sudoku_input):
         for line in f:
             board[i] = line.strip().split()
             i += 1
-    
+
     i = 0
     if sudoku_input != "":
         tmp = []
@@ -41,22 +72,24 @@ def solve_sudoku(sudoku_input):
 
     done = False
     initializePossiblityGrid(board, possibilities, numpos)
+    chances = 0
     while (not done):
-        changed = False
         deductPossibilityGrid(board, possibilities, numpos)
         advancedDeduction(board, possibilities, numpos)
+        chances += 1
         for x in range(0, 9):
             for y in range(0, 9):
                 if (numpos[x][y] == 1):
                     board[x][y] = possibilities[x][y][0]
+                    #possibilities[x][y] = []
                     numpos[x][y] = 0
-                    changed = True
+                    chances = 0
         done = checkIfDone(board)
-        if not changed:
+        if chances == 3:
             break
 
     print_board(board)
-    # print_possibility_grid(possibilities)
+    print_possibility_grid(possibilities)
     # print numpos
     return board
 
@@ -168,32 +201,42 @@ def deductPossibilityGrid(board, pos, npos):
 def getColumnorRow(indices):
     col = indices[0][0]
     row = indices[0][1]
-    bufcol = []
-    bufrow = []
-    col = True
-    row = True
+    bufcol = [col]
+    bufrow = [row]
+    same_col = True
+    same_row = True
     for i in range(1, len(indices)):
         bufcol.append(indices[i][0])
         bufrow.append(indices[i][1])
         if indices[i][0] != col:
-            col = False
+            same_col = False
         if indices[i][1] != row:
-            row = False
-    if col:
+            same_row = False
+    if same_col:
         return [0, col, bufrow]
-    if row:
+    if same_row:
         return [1, row, bufcol]
     return [2]
 
-def clearColumn(num, col, r1, r2, pos, npos):
-    for i in range(r1, r2+1):
-        if num in pos[col][i]:
+def clearColumn(num, col, rows, pos, npos):
+    for i in range(0, 9):
+        skip = False
+        for k in rows:
+            if i == k:
+                skip = True
+                break
+        if (not skip) and (num in pos[col][i]):
             pos[col][i].remove(num)
             npos[col][i] = len(pos[col][i])
 
-def clearRow(num, row, c1, c2, pos, npos):
-    for i in range(c1, c2):
-        if num in pos[i][row]:
+def clearRow(num, row, cols, pos, npos):
+    for i in range(0, 9):
+        skip = False
+        for k in cols:
+            if i == k:
+                skip = True
+                break
+        if (not skip) and (num in pos[i][row]):
             pos[i][row].remove(num)
             npos[i][row] = len(pos[i][row])
 
@@ -217,12 +260,11 @@ def advancedDeduction(board, pos, npos):
                                 indices.append([i+x, j+y])
                     index = getColumnorRow(indices)
                     if index[0] == 0:
-                        clearColumn(str(k), index[1], min(index[2]), max(index[2]), pos, npos)
+                        clearColumn(str(k), index[1], index[2], pos, npos)
                     elif index[0] == 1:
-                        clearRow(str(k), index[1], min(index[2]), max(index[2]), pos, npos)
+                        clearRow(str(k), index[1], index[2], pos, npos)
             j += 3
         i = i + 3
-
 
 def print_board(board):
     for x in range(0, 9):
@@ -231,11 +273,51 @@ def print_board(board):
             sys.stdout.write(' ')
             sys.stdout.flush()
         print ''
+    print ''
 
 def print_possibility_grid(grid):
     for x in range(0, 9):
         for y in range(0, 9):
             print grid[x][y]
         print ''
+
+def validateCell(board, row, col):
+    # check row
+    if board[row].count(board[row][col]) != 1:
+        return False
+    # check col
+    tmp = []
+    for i in range(0, 9):
+        tmp.append(board[i][col])
+    if tmp.count(board[row][col]) != 1:
+        return False
+    # check grid
+    pair = getTopLeftGridPos(row, col)
+    pairX = pair[0]
+    pairY = pair[1]
+    tmp = []
+    for x in range(0, 3):
+        for y in range(0, 3):
+            tmp.append(board[pairX+x][pairY+y])
+    if tmp.count(board[row][col]) != 1:
+        return False
+    return True
+
+def validateBoard(board):
+    for i in range(0, 9):
+        for j in range(0, 9):
+            validateCell(board, i, j)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
